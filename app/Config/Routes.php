@@ -7,4 +7,10 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-service('auth')->routes($routes);
+service('auth')->routes($routes, [
+  'except' => [
+    'register',
+    'magic-link',
+    'auth-actions',
+  ],
+]);

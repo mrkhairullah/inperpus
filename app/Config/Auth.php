@@ -47,16 +47,16 @@ class Auth extends ShieldAuth
      */
     public array $views = [
         'login'                       => '\CodeIgniter\Shield\Views\login',
-        'register'                    => '\CodeIgniter\Shield\Views\register',
+        // 'register'                    => '\CodeIgniter\Shield\Views\register',
         'layout'                      => '\CodeIgniter\Shield\Views\layout',
-        'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
-        'action_email_2fa_verify'     => '\CodeIgniter\Shield\Views\email_2fa_verify',
-        'action_email_2fa_email'      => '\CodeIgniter\Shield\Views\Email\email_2fa_email',
-        'action_email_activate_show'  => '\CodeIgniter\Shield\Views\email_activate_show',
-        'action_email_activate_email' => '\CodeIgniter\Shield\Views\Email\email_activate_email',
-        'magic-link-login'            => '\CodeIgniter\Shield\Views\magic_link_form',
-        'magic-link-message'          => '\CodeIgniter\Shield\Views\magic_link_message',
-        'magic-link-email'            => '\CodeIgniter\Shield\Views\Email\magic_link_email',
+        // 'action_email_2fa'            => '\CodeIgniter\Shield\Views\email_2fa_show',
+        // 'action_email_2fa_verify'     => '\CodeIgniter\Shield\Views\email_2fa_verify',
+        // 'action_email_2fa_email'      => '\CodeIgniter\Shield\Views\Email\email_2fa_email',
+        // 'action_email_activate_show'  => '\CodeIgniter\Shield\Views\email_activate_show',
+        // 'action_email_activate_email' => '\CodeIgniter\Shield\Views\Email\email_activate_email',
+        // 'magic-link-login'            => '\CodeIgniter\Shield\Views\magic_link_form',
+        // 'magic-link-message'          => '\CodeIgniter\Shield\Views\magic_link_message',
+        // 'magic-link-email'            => '\CodeIgniter\Shield\Views\Email\magic_link_email',
     ];
 
     /**
@@ -75,7 +75,7 @@ class Auth extends ShieldAuth
      */
     public array $redirects = [
         'register'          => '/',
-        'login'             => '/',
+        'login'             => '/admin',
         'logout'            => 'login',
         'force_reset'       => '/',
         'permission_denied' => '/',
@@ -152,7 +152,7 @@ class Auth extends ShieldAuth
      * --------------------------------------------------------------------
      * Determines whether users can register for the site.
      */
-    public bool $allowRegistration = true;
+    public bool $allowRegistration = false;
 
     /**
      * --------------------------------------------------------------------
@@ -176,7 +176,7 @@ class Auth extends ShieldAuth
      * could be modified as the only method of login once an account
      * has been set up.
      */
-    public bool $allowMagicLinkLogins = true;
+    public bool $allowMagicLinkLogins = false;
 
     /**
      * --------------------------------------------------------------------
