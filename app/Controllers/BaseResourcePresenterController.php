@@ -47,6 +47,8 @@ class BaseResourcePresenterController extends ResourcePresenter
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
     {
         parent::initController($request, $response, $logger);
+
+        $this->viewFolder  = rtrim($this->viewFolder, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -56,7 +58,20 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function index()
     {
-        //
+        try {
+            return view($this->viewFolder . 'index', [
+                'viewTitle'             => $this->viewTitle,
+                'routeName'             => $this->routeName,
+                ($this->dataName . 's') => $this->model->where('deleted_at', NULL)->paginate(25),
+                'pager'                 => $this->model->pager,
+            ]);
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+            // return redirect($this->routeName . '.index')
+            //     ->with('message', [
+            //         'failed' => 'Terjadi kesalahan pada sistem',
+            //     ]);
+        }
     }
 
     /**
@@ -66,7 +81,19 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function trash()
     {
-        //
+        try {
+            return view($this->viewFolder . 'trash', [
+                'viewTitle'             => $this->viewTitle,
+                'routeName'             => $this->routeName,
+                ($this->dataName . 's') => $this->model->where('deleted_at !=', NULL)->paginate(25),
+                'pager'                 => $this->model->pager,
+            ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -78,7 +105,27 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function show($id = null)
     {
-        //
+        try {
+            $data = $this->model->find($id);
+
+            if (!$data) {
+                return redirect($this->routeName . '.index')
+                    ->with('message', [
+                        'failed' => 'Gagal menemukan data untuk ditampilkan dengan id: ' . $id,
+                    ]);
+            }
+
+            return view($this->viewFolder . 'show', [
+                'viewTitle'     => $this->viewTitle,
+                'routeName'     => $this->routeName,
+                $this->dataName => $data,
+            ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -88,7 +135,11 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function new()
     {
-        //
+        return view($this->viewFolder . 'new', [
+            'viewTitle' => $this->viewTitle,
+            'routeName' => $this->routeName,
+            ...($this->others['new'] ?? []),
+        ]);
     }
 
     /**
@@ -99,7 +150,26 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function create()
     {
-        //
+        try {
+            $isSuccess = $this->model->insert($this->request->getPost());
+
+            if (!$isSuccess) {
+                return redirect($this->routeName . '.index')
+                    ->with('message', [
+                        'failed' => 'Gagal membuat data',
+                    ]);
+            }
+
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'success' => 'Berhasil membuat data dengan id: ' . $isSuccess,
+                ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -111,7 +181,28 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function edit($id = null)
     {
-        //
+        try {
+            $data = $this->model->find($id);
+
+            if (!$data) {
+                return redirect($this->routeName . '.index')
+                    ->with('message', [
+                        'failed' => 'Gagal menemukan data untuk diubah dengan id: ' . $id,
+                    ]);
+            }
+
+            return view($this->viewFolder . 'edit', [
+                'viewTitle'     => $this->viewTitle,
+                'routeName'     => $this->routeName,
+                $this->dataName => $data,
+                ...($this->others['edit'] ?? []),
+            ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -124,7 +215,26 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function update($id = null)
     {
-        //
+        try {
+            $isSuccess = $this->model->update($id, $this->request->getPost());
+
+            if (!$isSuccess) {
+                return redirect($this->routeName . '.index')
+                    ->with('message', [
+                        'failed' => 'Gagal mengubah data dengan id: ' . $id,
+                    ]);
+            }
+
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'success' => 'Berhasil mengubah data dengan id: ' . $isSuccess,
+                ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -136,7 +246,26 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function delete($id = null)
     {
-        //
+        try {
+            $isSuccess = $this->model->delete($id);
+
+            if (!$isSuccess) {
+                return redirect($this->routeName . '.index')
+                    ->with('message', [
+                        'failed' => 'Gagal menghapus data dengan id: ' . $id,
+                    ]);
+            }
+
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'success' => 'Berhasil menghapus data dengan id: ' . $id,
+                ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.index')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -148,7 +277,26 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function purgeDelete($id = null)
     {
-        //
+        try {
+            $isSuccess = $this->model->delete($id, true);
+
+            if (!$isSuccess) {
+                return redirect($this->routeName . '.trash')
+                    ->with('message', [
+                        'failed' => 'Gagal menghapus data permanen dengan id: ' . $id,
+                    ]);
+            }
+
+            return redirect($this->routeName . '.trash')
+                ->with('message', [
+                    'success' => 'Berhasil menghapus data permanen dengan id: ' . $id,
+                ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.trash')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 
     /**
@@ -160,6 +308,25 @@ class BaseResourcePresenterController extends ResourcePresenter
      */
     public function restore($id = null)
     {
-        //
+        try {
+            $isSuccess = $this->model->restore($id);
+
+            if (!$isSuccess) {
+                return redirect($this->routeName . '.trash')
+                    ->with('message', [
+                        'failed' => 'Gagal memulihkan data dengan id: ' . $id,
+                    ]);
+            }
+
+            return redirect($this->routeName . '.trash')
+                ->with('message', [
+                    'success' => 'Berhasil memulihkan data dengan id: ' . $id,
+                ]);
+        } catch (\Throwable $th) {
+            return redirect($this->routeName . '.trash')
+                ->with('message', [
+                    'failed' => 'Terjadi kesalahan pada sistem',
+                ]);
+        }
     }
 }
