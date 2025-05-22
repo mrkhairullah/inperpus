@@ -66,11 +66,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                 'pager'                 => $this->model->pager,
             ]);
         } catch (\Throwable $th) {
-            return $th->getMessage();
-            // return redirect($this->routeName . '.index')
-            //     ->with('message', [
-            //         'failed' => 'Terjadi kesalahan pada sistem',
-            //     ]);
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
+            return redirect($this->routeName . '.index')
+                ->with('status', $status);
         }
     }
 
@@ -89,10 +94,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                 'pager'                 => $this->model->pager,
             ]);
         } catch (\Throwable $th) {
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
             return redirect($this->routeName . '.index')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+                ->with('status', $status);
         }
     }
 
@@ -121,10 +132,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                 $this->dataName => $data,
             ]);
         } catch (\Throwable $th) {
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
             return redirect($this->routeName . '.index')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+                ->with('status', $status);
         }
     }
 
@@ -165,10 +182,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                     'success' => 'Berhasil membuat data dengan id: ' . $isSuccess,
                 ]);
         } catch (\Throwable $th) {
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
             return redirect($this->routeName . '.index')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+                ->with('status', $status);
         }
     }
 
@@ -198,10 +221,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                 ...($this->others['edit'] ?? []),
             ]);
         } catch (\Throwable $th) {
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
             return redirect($this->routeName . '.index')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+                ->with('status', $status);
         }
     }
 
@@ -230,10 +259,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                     'success' => 'Berhasil mengubah data dengan id: ' . $isSuccess,
                 ]);
         } catch (\Throwable $th) {
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
             return redirect($this->routeName . '.index')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+                ->with('status', $status);
         }
     }
 
@@ -261,10 +296,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                     'success' => 'Berhasil menghapus data dengan id: ' . $id,
                 ]);
         } catch (\Throwable $th) {
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
             return redirect($this->routeName . '.index')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+                ->with('status', $status);
         }
     }
 
@@ -292,10 +333,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                     'success' => 'Berhasil menghapus data permanen dengan id: ' . $id,
                 ]);
         } catch (\Throwable $th) {
-            return redirect($this->routeName . '.trash')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
+            return redirect($this->routeName . '.index')
+                ->with('status', $status);
         }
     }
 
@@ -323,10 +370,16 @@ class BaseResourcePresenterController extends ResourcePresenter
                     'success' => 'Berhasil memulihkan data dengan id: ' . $id,
                 ]);
         } catch (\Throwable $th) {
-            return redirect($this->routeName . '.trash')
-                ->with('message', [
-                    'failed' => 'Terjadi kesalahan pada sistem',
-                ]);
+            $status = [
+                'failed' => 'Terjadi kesalahan pada sistem',
+            ];
+
+            if (ENVIRONMENT === 'development') {
+                $status['message'] = $th->getMessage();
+            }
+
+            return redirect($this->routeName . '.index')
+                ->with('status', $status);
         }
     }
 }
